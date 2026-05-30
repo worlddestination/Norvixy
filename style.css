@@ -1326,3 +1326,91 @@ body.cursor-hover .cursor-ring {
   .hero-title { font-size: 44px; }
   .hero-stats { gap: 16px; }
 }
+/* === ENTERPRISE UPGRADES === */
+
+/* Glassmorphism cards */
+.info-card, .season-card, .budget-card, .tip-item, .related-card, .feature-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Header glass upgrade */
+.header {
+  background: rgba(7,10,15,0.6) !important;
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+
+/* Search card glow */
+.search-card {
+  background: linear-gradient(135deg, rgba(26,33,48,0.9), rgba(19,25,35,0.95));
+  border: 1px solid rgba(201,168,76,0.18);
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.05), 0 32px 80px rgba(0,0,0,0.6);
+}
+
+/* Info cards hover glow */
+.info-card:hover {
+  border-color: rgba(201,168,76,0.4);
+  box-shadow: 0 0 24px rgba(201,168,76,0.08), 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* Trending card image overlay shimmer */
+.trending-card:hover .trending-img-placeholder {
+  transform: scale(1.05);
+  transition: transform 0.4s ease;
+}
+
+/* Budget featured card */
+.budget-card.featured {
+  background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.04));
+  border: 1px solid rgba(201,168,76,0.4);
+  box-shadow: 0 0 32px rgba(201,168,76,0.1);
+}
+
+/* Section dividers */
+.features-section::after, .trending-section::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent);
+  margin-top: 80px;
+}
+
+/* AI body headings color */
+.ai-body h3 { color: var(--gold); font-size: 18px; }
+
+/* Dest name bigger impact */
+.dest-name { text-shadow: 0 4px 32px rgba(0,0,0,0.8); }
+
+/* Related card hover */
+.related-card:hover {
+  box-shadow: 0 8px 32px rgba(201,168,76,0.12);
+}
+
+/* Photo grid cursor */
+.dest-image-grid img {
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.dest-image-grid img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+/* Photo count badge on header images */
+.dest-image-wrap::after {
+  content: '📷 Click photos to view gallery';
+  position: absolute;
+  bottom: 100px;
+  right: 20px;
+  background: rgba(0,0,0,0.7);
+  color: #C9A84C;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(201,168,76,0.3);
+  z-index: 5;
+  font-family: 'Space Mono', monospace;
+  pointer-events: none;
+}
