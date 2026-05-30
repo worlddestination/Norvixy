@@ -267,6 +267,21 @@
             </h3>
             <div class="related-grid" id="relatedGrid"></div>
           </div>
+          <!-- AI FOLLOW-UP CHAT -->
+<div class="followup-section" id="followupSection">
+  <h3 class="sub-section-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Ask Follow-up Questions
+  </h3>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-wrap">
+    <input type="text" id="chatInput" class="chat-input" placeholder="e.g. Is it safe for solo female travel?" />
+    <button class="chat-send-btn" id="chatSendBtn" onclick="sendFollowup()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+  <div class="chat-suggestions" id="chatSuggestions"></div>
+</div>
 
           <button class="new-search-btn" onclick="resetSearch()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
