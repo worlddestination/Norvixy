@@ -43,6 +43,7 @@ const CURRENCIES = {
 let selectedTripType = 'Backpacker';
 let selectedBudget   = 'Budget ($)';
 let selectedCurrency = 'USD';
+let selectedLang = 'English';
 let currentQuery     = '';
 let isLoading        = false;
 let lastParsedData   = null;
@@ -373,6 +374,7 @@ function buildPrompt(query, tripType, budget) {
   }
 
   return 'You are World AI 360 — the world\'s most comprehensive travel intelligence system.\n' +
+'CRITICAL LANGUAGE INSTRUCTION: You MUST write the "aiResponse" field and all "tips" array items and all "tagline" field ENTIRELY in ' + selectedLang + ' language. All other JSON fields (destination, country, region, label names, visa values, season names) stay in English for app functionality. Only aiResponse, tips array, and tagline must be in ' + selectedLang + '.\n' +
     'A user is asking about: "' + query + '"\n' +
     'Trip type: ' + tripType + ' | Budget: ' + budget + '\n' +
     locationHint + '\n' +
@@ -460,7 +462,13 @@ function renderResult(data, originalQuery) {
       '</div>';
   }).join('');
 
-  document.getElementById('aiBody').innerHTML = markdownToHtml(data.aiResponse || '');
+  var aiBody = document.getElementById('aiBody');
+aiBody.innerHTML = markdownToHtml(data.aiResponse || '');
+if (selectedLang === 'Arabic') {
+  aiBody.classList.add('lang-rtl');
+} else {
+  aiBody.classList.remove('lang-rtl');
+}
   renderBudget(data.budgetBreakdown);
 
   const tipsList = document.getElementById('tipsList');
@@ -779,8 +787,9 @@ async function sendFollowup() {
     tips:        lastParsedData.tips
   }) : '';
 
-  const systemPrompt = 'You are a friendly expert travel guide for ' + destination + '. ' +
+  const systemPrompt = var systemPrompt = 'You are a friendly expert travel guide for ' + destination + '. ' +
     'Context: ' + context + '. ' +
+    'IMPORTANT: Answer ENTIRELY in ' + selectedLang + ' language. ' +
     'Answer in 2-4 short paragraphs. Use **bold** for key points. Be specific, practical, and conversational. ' +
     'Currency context: user selected ' + selectedCurrency + '.';
 
@@ -1484,4 +1493,12 @@ function copyTripCard() {
       alert('Copy supported nahi hai is browser mein. Download use karo!');
     }
   });
+}
+// ═══════════ MULTI-LANGUAGE ═══════════
+function selectLang(btn) {
+  document.querySelectorAll('.lang-pill').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  selectedLang = btn.dataset.lang;
 }
