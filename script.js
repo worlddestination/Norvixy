@@ -437,12 +437,14 @@ function renderResult(data, originalQuery) {
   });
   window._allPhotos = allPhotos;
 
- imgGrid.innerHTML = terms.slice(0, 3).map(function(term, idx) {
-  var startIdx = idx * 3;
-  return '<img src="https://picsum.photos/seed/' + encodeURIComponent(term) + '/800/500" ' +
-    'alt="' + term + '" loading="lazy" style="cursor:pointer" ' +
+imgGrid.innerHTML = terms.slice(0, 3).map(function(term, idx) {
+  var startIdx = idx * 22;
+  var seed = encodeURIComponent(term);
+  return '<img src="https://picsum.photos/seed/' + seed + '/800/500" ' +
+    'alt="' + term + '" loading="lazy" ' +
+    'style="cursor:pointer;width:100%;height:100%;object-fit:cover;" ' +
     'onclick="openLightbox(' + startIdx + ')" ' +
-    'onerror="this.style.background=\'#1A2130\'">';
+    'onerror="this.src=\'https://picsum.photos/800/500?random=' + idx + '\'">';
 }).join('');
 
   document.getElementById('destBadge').textContent   = (data.flag || '🌍') + ' ' + (data.region || data.country);
