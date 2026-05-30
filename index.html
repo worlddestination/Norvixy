@@ -48,6 +48,9 @@
         </div>
       </div>
       <button class="btn-header" onclick="scrollToSearch()">Start Journey</button>
+      <button class="btn-header btn-wishlist" onclick="openWishlist()">
+  ❤️ Wishlist <span class="wishlist-count" id="wishlistCount">0</span>
+</button>
     </div>
   </header>
 
@@ -336,6 +339,19 @@
   </div>
   <div class="chat-suggestions" id="chatSuggestions"></div>
 </div>
+          <!-- SAVE TO BUCKET LIST -->
+<div class="bucket-bar" id="bucketBar">
+  <div class="bucket-bar-left">
+    <span class="bucket-heart" id="bucketHeart">🤍</span>
+    <div>
+      <p class="bucket-dest-name" id="bucketDestName">—</p>
+      <p class="bucket-dest-sub">Save to your travel wishlist</p>
+    </div>
+  </div>
+  <button class="bucket-save-btn" id="bucketSaveBtn" onclick="toggleBucketList()">
+    Save Destination
+  </button>
+</div>
 
           <button class="new-search-btn" onclick="resetSearch()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
@@ -446,6 +462,22 @@
       </div>
     </div>
   </footer>
+  <!-- WISHLIST MODAL -->
+<div class="wishlist-overlay" id="wishlistOverlay" onclick="closeWishlist()"></div>
+<div class="wishlist-modal" id="wishlistModal">
+  <div class="wishlist-modal-header">
+    <h3>❤️ My Bucket List</h3>
+    <button class="wishlist-close" onclick="closeWishlist()">✕</button>
+  </div>
+  <div class="wishlist-modal-body" id="wishlistBody">
+    <div class="wishlist-empty" id="wishlistEmpty">
+      <span>🌍</span>
+      <p>No destinations saved yet!</p>
+      <p class="wishlist-empty-sub">Search any place and hit "Save Destination"</p>
+    </div>
+    <div class="wishlist-items" id="wishlistItems"></div>
+  </div>
+</div>
 
   <script src="script.js"></script>
 </body>
