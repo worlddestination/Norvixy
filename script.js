@@ -479,6 +479,7 @@ function renderResult(data, originalQuery) {
   }).join('');
    initFollowupChat(data.destination);
    setTimeout(updateCalc, 100);
+   initBucketBar(data);
   showResult();
   setTimeout(function() {
     document.getElementById('resultContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -908,3 +909,140 @@ function updateCalc() {
     '</div>';
   }).join('');
 }
+// ═══════════ BUCKET LIST / WISHLIST ═══════════
+function loadBucketList() {
+  try {
+    return JSON.parse(localStorage.getItem('worldai360_wishlist') || '[]');
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveBucketList(list) {
+  localStorage.setItem('worldai360_wishlist', JSON.stringify(list));
+  updateWishlistCount();
+}
+
+function updateWishlistCount() {
+  var list  = loadBucketList();
+  var count = document.getElementById('wishlistCount');
+  if (count) count.textContent = list.length;
+}
+
+function initBucketBar(data) {
+  var nameEl = document.getElementById('bucketDestName');
+  var btn    = document.getElementById('bucketSaveBtn');
+  var heart  = document.getElementById('bucketHeart');
+  if (!nameEl || !data) return;
+
+  nameEl.textContent = data.destination;
+  var list   = loadBucketList();
+  var exists = list.some(function(i) { return i.destination === data.destination; });
+
+  if (exists) {
+    btn.textContent = '✓ Saved';
+    btn.classList.add('saved');
+    heart.textContent = '❤️';
+  } else {
+    btn.textContent = 'Save Destination';
+    btn.classList.remove('saved');
+    heart.textContent = '🤍';
+  }
+}
+
+function toggleBucketList() {
+  if (!lastParsedData) return;
+  var list   = loadBucketList();
+  var idx    = list.findIndex(function(i) { return i.destination === lastParsedData.destination; });
+  var btn    = document.getElementById('bucketSaveBtn');
+  var heart  = document.getElementById('bucketHeart');
+
+  if (idx >= 0) {
+    // Remove
+    list.splice(idx, 1);
+    btn.textContent = 'Save Destination';
+    btn.classList.remove('saved');
+    heart.textContent = '🤍';
+  } else {
+    // Add
+    list.push({
+      destination: lastParsedData.destination,
+      country:     lastParsedData.country,
+      flag:        lastParsedData.flag || '🌍',
+      tagline:     lastParsedData.tagline || '',
+      savedAt:     new Date().toLocaleDateString(),
+      query:       currentQuery
+    });
+    btn.textContent = '✓ Saved';
+    btn.classList.add('saved');
+    heart.textContent = '❤️';
+    heart.classList.add('saved');
+    setTimeout(function() { heart.classList.remove('saved'); }, 400);
+  }
+
+  saveBucketList(list);
+}
+
+function openWishlist() {
+  renderWishlistItems();
+  document.getElementById('wishlistOverlay').classList.add('open');
+  document.getElementById('wishlistModal').classList.add('open');
+}
+
+function closeWishlist() {
+  document.getElementById('wishlistOverlay').classList.remove('open');
+  document.getElementById('wishlistModal').classList.remove('open');
+}
+
+function renderWishlistItems() {
+  var list      = loadBucketList();
+  var empty     = document.getElementById('wishlistEmpty');
+  var itemsWrap = document.getElementById('wishlistItems');
+
+  if (list.length === 0) {
+    empty.style.display     = 'block';
+    itemsWrap.style.display = 'none';
+    return;
+  }
+
+  empty.style.display     = 'none';
+  itemsWrap.style.display = 'flex';
+
+  itemsWrap.innerHTML = list.map(function(item, i) {
+    return '<div class="wishlist-item" id="witem-' + i + '">' +
+      '<div class="wishlist-item-left">' +
+        '<span class="wishlist-item-flag">' + item.flag + '</span>' +
+        '<div>' +
+          '<div class="wishlist-item-name">' + item.destination + '</div>' +
+          '<div class="wishlist-item-meta">' + item.country + ' · Saved ' + item.savedAt + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="wishlist-item-actions">' +
+        '<button class="wishlist-action-btn" onclick="exploreFromWishlist(\'' + escapeAttr(item.query) + '\')">Explore</button>' +
+        '<button class="wishlist-action-btn remove" onclick="removeFromWishlist(' + i + ')">Remove</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function removeFromWishlist(idx) {
+  var list = loadBucketList();
+  list.splice(idx, 1);
+  saveBucketList(list);
+  renderWishlistItems();
+  if (lastParsedData) initBucketBar(lastParsedData);
+}
+
+function exploreFromWishlist(query) {
+  closeWishlist();
+  var input = document.getElementById('searchInput');
+  input.value = query;
+  document.getElementById('searchClear').classList.add('visible');
+  document.getElementById('explore').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(handleSearch, 600);
+}
+
+// Wishlist count on page load
+document.addEventListener('DOMContentLoaded', function() {
+  updateWishlistCount();
+});
