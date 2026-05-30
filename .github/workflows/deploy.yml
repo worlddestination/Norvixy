@@ -1,2 +1,42 @@
-name: Inject API Key
-  run: sed -i "s/YOUR_GEMINI_API_KEY/${{ secrets.GEMINI_API_KEY }}/g" script.js
+name: Deploy World AI 360
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Inject Gemini API Key into script.js
+        run: |
+          sed -i "s/YOUR_GEMINI_API_KEY/${{ secrets.GEMINI_API_KEY }}/g" script.js
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload site to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
