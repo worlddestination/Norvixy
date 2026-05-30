@@ -240,6 +240,60 @@
             </div>
             <div class="ai-body" id="aiBody"></div>
           </div>
+          <!-- COST CALCULATOR -->
+<div class="cost-calc-section" id="costCalcSection">
+  <h3 class="sub-section-title">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    Trip Cost Calculator
+  </h3>
+
+  <div class="calc-controls">
+    <div class="calc-control-group">
+      <label class="calc-label">📅 Number of Days</label>
+      <div class="calc-slider-wrap">
+        <input type="range" id="calcDays" min="1" max="30" value="7" class="calc-slider" oninput="updateCalc()"/>
+        <span class="calc-val" id="calcDaysVal">7 days</span>
+      </div>
+    </div>
+    <div class="calc-control-group">
+      <label class="calc-label">👥 Number of People</label>
+      <div class="calc-slider-wrap">
+        <input type="range" id="calcPeople" min="1" max="10" value="2" class="calc-slider" oninput="updateCalc()"/>
+        <span class="calc-val" id="calcPeopleVal">2 people</span>
+      </div>
+    </div>
+    <div class="calc-control-group">
+      <label class="calc-label">💼 Budget Tier</label>
+      <div class="calc-tier-pills">
+        <button class="calc-tier-btn active" data-tier="0" onclick="selectTier(this)">Budget</button>
+        <button class="calc-tier-btn" data-tier="1" onclick="selectTier(this)">Mid-Range</button>
+        <button class="calc-tier-btn" data-tier="2" onclick="selectTier(this)">Luxury</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="calc-result">
+    <div class="calc-result-grid">
+      <div class="calc-result-item">
+        <span class="calc-result-label">Per Person / Day</span>
+        <span class="calc-result-val" id="calcPerDay">—</span>
+      </div>
+      <div class="calc-result-item">
+        <span class="calc-result-label">Per Person Total</span>
+        <span class="calc-result-val" id="calcPerPerson">—</span>
+      </div>
+      <div class="calc-result-item highlight">
+        <span class="calc-result-label">Total Trip Cost</span>
+        <span class="calc-result-val big" id="calcTotal">—</span>
+      </div>
+      <div class="calc-result-item">
+        <span class="calc-result-label">Flights (est.)</span>
+        <span class="calc-result-val" id="calcFlights">—</span>
+      </div>
+    </div>
+    <div class="calc-breakdown" id="calcBreakdown"></div>
+  </div>
+</div>
 
           <!-- Budget Breakdown -->
           <div class="budget-section" id="budgetSection">
