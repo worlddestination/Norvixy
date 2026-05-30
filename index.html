@@ -1,383 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World AI 360 — Explore Every Corner of Earth</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>World AI 360 — Enterprise Travel Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- ═══════════════════════════════ CURSOR ═══════════════════════════════ -->
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- ═══════════════════════════════ LOADER ══════════════════════════════ -->
-  <div class="loader" id="loader">
-    <div class="loader-globe">
-      <div class="globe-ring"></div>
-      <div class="globe-ring r2"></div>
-      <div class="globe-ring r3"></div>
-    </div>
-    <p class="loader-text">Mapping the World<span class="dots">...</span></p>
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <svg class="loader-globe-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="54" stroke="rgba(212,175,55,0.15)" stroke-width="1"/>
+      <circle cx="60" cy="60" r="54" stroke="url(#lg1)" stroke-width="1.5" stroke-dasharray="339" stroke-dashoffset="339" class="globe-arc arc1"/>
+      <circle cx="60" cy="60" r="38" stroke="url(#lg2)" stroke-width="1" stroke-dasharray="239" stroke-dashoffset="239" class="globe-arc arc2"/>
+      <circle cx="60" cy="60" r="20" stroke="url(#lg3)" stroke-width="1" stroke-dasharray="126" stroke-dashoffset="126" class="globe-arc arc3"/>
+      <line x1="6" y1="60" x2="114" y2="60" stroke="rgba(212,175,55,0.1)" stroke-width="1"/>
+      <line x1="60" y1="6" x2="60" y2="114" stroke="rgba(212,175,55,0.1)" stroke-width="1"/>
+      <defs>
+        <linearGradient id="lg1" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#D4AF37"/>
+          <stop offset="1" stop-color="#00C9A7"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="120" y1="0" x2="0" y2="120" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#00C9A7"/>
+          <stop offset="1" stop-color="#3B82F6"/>
+        </linearGradient>
+        <linearGradient id="lg3" x1="0" y1="120" x2="120" y2="0" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#3B82F6"/>
+          <stop offset="1" stop-color="#D4AF37"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <p class="loader-tagline">World<em>AI</em><strong>360</strong></p>
+    <p class="loader-sub">Initializing Travel Intelligence...</p>
   </div>
+</div>
 
-  <!-- ═══════════════════════════════ HEADER ══════════════════════════════ -->
-  <header class="header" id="header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">◎</span>
-        <span class="logo-text">World<em>AI</em><strong>360</strong></span>
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+          <circle cx="16" cy="16" r="14" stroke="#D4AF37" stroke-width="1.5"/>
+          <ellipse cx="16" cy="16" rx="6" ry="14" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
+          <line x1="2" y1="16" x2="30" y2="16" stroke="#D4AF37" stroke-width="1" opacity="0.4"/>
+          <circle cx="16" cy="16" r="2" fill="#D4AF37"/>
+        </svg>
       </div>
-      <nav class="nav">
-        <a href="#explore" class="nav-link">Explore</a>
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#trending" class="nav-link">Trending</a>
-      </nav>
+      <span class="logo-text">World<em>AI</em><strong>360</strong></span>
+    </div>
+    <nav class="nav">
+      <a href="#explore" class="nav-link">Explore</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#trending" class="nav-link">Trending</a>
+    </nav>
+    <div class="header-actions">
       <div class="currency-wrap">
         <button class="currency-btn" id="currencyBtn" onclick="toggleCurrencyDropdown()">
           <span id="currencyBadge">🇺🇸 USD</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="currency-dropdown" id="currencyDropdown">
-          <div class="currency-dropdown-header">Select Currency</div>
+          <div class="currency-dd-head">Select Currency</div>
           <select id="currencySelect" size="8"></select>
         </div>
       </div>
-      <button class="btn-header" onclick="scrollToSearch()">Start Journey</button>
-    </div>
-  </header>
-
-  <!-- ═══════════════════════════════ HERO ════════════════════════════════ -->
-  <section class="hero" id="home">
-    <div class="hero-bg">
-      <div class="hero-orb orb1"></div>
-      <div class="hero-orb orb2"></div>
-      <div class="hero-orb orb3"></div>
-      <div class="grid-lines"></div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        AI-Powered Global Travel Intelligence
-      </div>
-      <h1 class="hero-title">
-        Discover Every<br/>
-        <em class="title-italic">Corner</em> of<br/>
-        <span class="title-highlight">Earth</span>
-      </h1>
-      <p class="hero-sub">
-        Ask anything about any destination — seasons, costs, itineraries, hidden gems, visa info, local culture. Our AI knows the world.
-      </p>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-num">195</span><span class="stat-label">Countries</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><span class="stat-num">10K+</span><span class="stat-label">Destinations</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><span class="stat-num">AI</span><span class="stat-label">Powered</span></div>
-      </div>
-      <button class="hero-cta" onclick="scrollToSearch()">
-        <span>Explore the World</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <button class="btn-primary" onclick="scrollToSearch()">
+        <span>Start Journey</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
-    <div class="hero-globe-wrap">
-      <div class="globe-visual">
-        <div class="globe-sphere">
-          <div class="globe-inner-ring r1"></div>
-          <div class="globe-inner-ring r2"></div>
-          <div class="globe-inner-ring r3"></div>
-          <div class="globe-dot d1"></div>
-          <div class="globe-dot d2"></div>
-          <div class="globe-dot d3"></div>
-          <div class="globe-dot d4"></div>
-          <div class="globe-dot d5"></div>
-        </div>
-      </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-canvas">
+    <div class="hero-noise"></div>
+    <div class="orb orb-gold"></div>
+    <div class="orb orb-teal"></div>
+    <div class="orb orb-blue"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      <span>AI-Powered Global Travel Intelligence</span>
+      <span class="eyebrow-line"></span>
     </div>
-    <div class="scroll-indicator">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
+    <h1 class="hero-h1">
+      <span class="h1-line">Discover Every</span>
+      <span class="h1-line italic">Corner of</span>
+      <span class="h1-line accent">Earth</span>
+    </h1>
+    <p class="hero-desc">Ask anything about any destination. Seasons, costs, itineraries, hidden gems, visa requirements, local culture — our AI knows the world and adapts to where you are.</p>
+    <div class="hero-pills">
+      <div class="h-pill"><span class="h-pill-n">195</span><span class="h-pill-l">Countries</span></div>
+      <div class="h-pill-sep"></div>
+      <div class="h-pill"><span class="h-pill-n">10K+</span><span class="h-pill-l">Destinations</span></div>
+      <div class="h-pill-sep"></div>
+      <div class="h-pill"><span class="h-pill-n">Live</span><span class="h-pill-l">AI Powered</span></div>
     </div>
-  </section>
-
-  <!-- ═══════════════════════════════ QUICK PILLS ══════════════════════════ -->
-  <section class="quick-section">
-    <div class="container">
-      <p class="quick-label">Popular searches</p>
-      <div class="quick-pills" id="quickPills">
-        <button class="pill" data-query="Best time to visit Bali Indonesia with prices and itinerary">🌴 Bali, Indonesia</button>
-        <button class="pill" data-query="Complete guide to Paris France travel — costs, season, attractions">🗼 Paris, France</button>
-        <button class="pill" data-query="Japan cherry blossom season travel guide with budget">🌸 Japan in Spring</button>
-        <button class="pill" data-query="Maldives luxury travel guide — best resorts, costs and season">🏝️ Maldives</button>
-        <button class="pill" data-query="Safari in Kenya — best season, costs, parks and tips">🦁 Kenya Safari</button>
-        <button class="pill" data-query="New York City travel guide — best time, budget, attractions">🗽 New York</button>
-        <button class="pill" data-query="Santorini Greece travel — best season, hotels, budget breakdown">🇬🇷 Santorini</button>
-        <button class="pill" data-query="Dubai travel guide — best time to visit, costs, attractions, tips">✈️ Dubai</button>
-        <button class="pill" data-query="Rajasthan India travel — best season, cities, budget, culture">🕌 Rajasthan</button>
-        <button class="pill" data-query="Patagonia trekking guide — best season, costs and trails">🏔️ Patagonia</button>
-      </div>
+    <div class="hero-actions">
+      <button class="btn-hero" onclick="scrollToSearch()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Explore the World
+      </button>
+      <button class="btn-ghost" onclick="document.getElementById('trending').scrollIntoView({behavior:'smooth'})">View Trending →</button>
     </div>
-  </section>
+  </div>
+  <div class="hero-globe">
+    <div class="globe-rings">
+      <div class="g-ring r1"></div>
+      <div class="g-ring r2"></div>
+      <div class="g-ring r3"></div>
+      <div class="g-ring r4"></div>
+      <div class="g-core"></div>
+      <div class="g-dot gd1"></div>
+      <div class="g-dot gd2"></div>
+      <div class="g-dot gd3"></div>
+      <div class="g-dot gd4"></div>
+      <div class="g-dot gd5"></div>
+      <div class="g-dot gd6"></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="sh-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
 
-  <!-- ═══════════════════════════════ MAIN SEARCH ══════════════════════════ -->
-  <section class="explore-section" id="explore">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">AI Explorer</span>
-        <h2 class="section-title">Ask About Any Destination</h2>
-        <p class="section-sub">Type any place, or ask specific questions — our AI will give you a complete travel guide</p>
-      </div>
+<!-- LOCATION BANNER -->
+<div class="location-banner" id="locationBanner">
+  <div class="lb-inner">
+    <div class="lb-icon">📍</div>
+    <div class="lb-text">
+      <span class="lb-label">Your Location</span>
+      <span class="lb-val" id="locationVal">Detecting...</span>
+    </div>
+    <div class="lb-tip">We'll personalize recommendations, flight costs &amp; visa info based on your location</div>
+  </div>
+</div>
 
-      <div class="search-card" id="searchCard">
-        <div class="search-input-wrap">
-          <div class="search-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </div>
-          <input
-            type="text"
-            id="searchInput"
-            class="search-input"
-            placeholder="e.g. 'Best time to visit Switzerland' or 'Budget trip to Thailand'..."
-            autocomplete="off"
-          />
-          <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+<!-- QUICK SEARCHES -->
+<section class="quick-section">
+  <div class="container">
+    <div class="quick-head">
+      <span class="mono-label">Popular Searches</span>
+      <div class="quick-scroll-hint">← scroll →</div>
+    </div>
+    <div class="quick-pills" id="quickPills">
+      <button class="q-pill" data-query="Best time to visit Bali Indonesia with prices and itinerary">🌴 Bali</button>
+      <button class="q-pill" data-query="Complete guide to Paris France travel costs season attractions">🗼 Paris</button>
+      <button class="q-pill" data-query="Japan cherry blossom season travel guide budget">🌸 Japan Spring</button>
+      <button class="q-pill" data-query="Maldives luxury travel guide best resorts costs season">🏝️ Maldives</button>
+      <button class="q-pill" data-query="Safari in Kenya best season costs parks tips">🦁 Kenya Safari</button>
+      <button class="q-pill" data-query="New York City travel guide best time budget attractions">🗽 New York</button>
+      <button class="q-pill" data-query="Santorini Greece travel best season hotels budget">🇬🇷 Santorini</button>
+      <button class="q-pill" data-query="Dubai travel guide best time costs attractions tips">✈️ Dubai</button>
+      <button class="q-pill" data-query="Rajasthan India travel best season cities budget culture">🕌 Rajasthan</button>
+      <button class="q-pill" data-query="Patagonia trekking guide best season costs trails">🏔️ Patagonia</button>
+      <button class="q-pill" data-query="Iceland Northern Lights travel guide best season costs">🌋 Iceland</button>
+      <button class="q-pill" data-query="Amalfi Coast Italy travel guide best time costs">🤌 Amalfi</button>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN SEARCH -->
+<section class="explore-section" id="explore">
+  <div class="container">
+    <div class="section-header">
+      <span class="sec-tag">AI Explorer</span>
+      <h2 class="sec-title">Ask About Any Destination</h2>
+      <p class="sec-sub">Type any place or question — our AI delivers a complete, personalized travel intelligence report</p>
+    </div>
+
+    <div class="search-card" id="searchCard">
+      <div class="search-row">
+        <div class="search-wrap">
+          <svg class="si" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="e.g. 'Best time to visit Switzerland' or 'Budget trip Thailand'..." autocomplete="off"/>
+          <button class="s-clear" id="searchClear" onclick="clearSearch()">✕</button>
         </div>
-
-        <div class="search-options">
-          <div class="option-group">
-            <label class="option-label">Trip Type</label>
-            <div class="option-pills">
-              <button class="opt-pill active" data-type="trip">🎒 Backpacker</button>
-              <button class="opt-pill" data-type="trip">💼 Business</button>
-              <button class="opt-pill" data-type="trip">👨‍👩‍👧 Family</button>
-              <button class="opt-pill" data-type="trip">💑 Couple</button>
-              <button class="opt-pill" data-type="trip">🏖️ Luxury</button>
-            </div>
-          </div>
-          <div class="option-group">
-            <label class="option-label">Budget Range</label>
-            <div class="option-pills">
-              <button class="opt-pill active" data-type="budget">💚 Budget ($)</button>
-              <button class="opt-pill" data-type="budget">💛 Mid-range ($$)</button>
-              <button class="opt-pill" data-type="budget">🔴 Luxury ($$$)</button>
-            </div>
-          </div>
-        </div>
-
         <button class="search-btn" id="searchBtn" onclick="handleSearch()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <span>Explore with AI</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Explore</span>
         </button>
       </div>
 
-      <!-- RESULT AREA -->
-      <div class="result-area" id="resultArea">
-
-        <!-- Loading skeleton -->
-        <div class="result-loading" id="resultLoading" style="display:none">
-          <div class="loading-header">
-            <div class="loading-globe-mini">
-              <div class="lgm-ring"></div>
-              <div class="lgm-ring r2"></div>
-            </div>
-            <div>
-              <div class="skel skel-title"></div>
-              <div class="skel skel-sub"></div>
-            </div>
+      <div class="search-filters">
+        <div class="filter-group">
+          <span class="filter-label">Trip Type</span>
+          <div class="filter-pills">
+            <button class="f-pill active" data-type="trip">🎒 Backpacker</button>
+            <button class="f-pill" data-type="trip">💼 Business</button>
+            <button class="f-pill" data-type="trip">👨‍👩‍👧 Family</button>
+            <button class="f-pill" data-type="trip">💑 Couple</button>
+            <button class="f-pill" data-type="trip">🏖️ Luxury</button>
           </div>
-          <div class="skel-grid">
-            <div class="skel skel-card"></div>
-            <div class="skel skel-card"></div>
-            <div class="skel skel-card"></div>
-            <div class="skel skel-card"></div>
-          </div>
-          <div class="skel skel-para"></div>
-          <div class="skel skel-para w80"></div>
-          <div class="skel skel-para w60"></div>
         </div>
-
-        <!-- Actual results -->
-        <div class="result-content" id="resultContent" style="display:none">
-
-          <!-- Destination Header -->
-          <div class="dest-header" id="destHeader">
-            <div class="dest-image-wrap" id="destImageWrap">
-              <div class="dest-image-grid" id="destImageGrid"></div>
-              <div class="dest-image-overlay"></div>
-            </div>
-            <div class="dest-title-block">
-              <div class="dest-badge" id="destBadge"></div>
-              <h2 class="dest-name" id="destName"></h2>
-              <p class="dest-tagline" id="destTagline"></p>
-              <div class="dest-meta" id="destMeta"></div>
-            </div>
+        <div class="filter-group">
+          <span class="filter-label">Budget</span>
+          <div class="filter-pills">
+            <button class="f-pill active" data-type="budget">💚 Budget ($)</button>
+            <button class="f-pill" data-type="budget">💛 Mid-Range ($$)</button>
+            <button class="f-pill" data-type="budget">🔴 Luxury ($$$)</button>
           </div>
+        </div>
+      </div>
+    </div>
 
-          <!-- Info Cards Grid -->
-          <div class="info-grid" id="infoGrid"></div>
+    <!-- RESULT AREA -->
+    <div class="result-area" id="resultArea">
 
-          <!-- Season Calendar -->
-          <div class="season-section" id="seasonSection">
-            <h3 class="sub-section-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Best Time to Visit
-            </h3>
-            <div class="season-grid" id="seasonGrid"></div>
+      <!-- LOADING -->
+      <div class="result-loading" id="resultLoading" style="display:none">
+        <div class="loading-orb"></div>
+        <p class="loading-txt" id="loadingTxt">Analyzing destination...</p>
+        <div class="loading-steps" id="loadingSteps">
+          <div class="ls active">🌍 Gathering destination data</div>
+          <div class="ls">📸 Loading destination photos</div>
+          <div class="ls">💰 Calculating budget estimates</div>
+          <div class="ls">✍️ Generating travel guide</div>
+        </div>
+        <div class="skel-grid">
+          <div class="skel sh-tall"></div>
+          <div class="skel-row">
+            <div class="skel sm-h"></div>
+            <div class="skel sm-h"></div>
+            <div class="skel sm-h"></div>
+            <div class="skel sm-h"></div>
           </div>
+          <div class="skel sp"></div>
+          <div class="skel sp w80"></div>
+          <div class="skel sp w60"></div>
+        </div>
+      </div>
 
-          <!-- Detailed AI Response -->
-          <div class="ai-response-card" id="aiResponseCard">
-            <div class="ai-header">
-              <div class="ai-avatar">AI</div>
-              <div>
-                <p class="ai-name">World AI 360</p>
-                <p class="ai-role">Global Travel Intelligence</p>
-              </div>
-            </div>
-            <div class="ai-body" id="aiBody"></div>
+      <!-- RESULT CONTENT -->
+      <div class="result-content" id="resultContent" style="display:none">
+
+        <!-- DEST HERO -->
+        <div class="dest-hero" id="destHero">
+          <div class="dest-photos-grid" id="destPhotosGrid">
+            <!-- Photos rendered here -->
           </div>
-
-          <!-- Budget Breakdown -->
-          <div class="budget-section" id="budgetSection">
-            <h3 class="sub-section-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              Budget Breakdown
-            </h3>
-            <div class="budget-grid" id="budgetGrid"></div>
+          <div class="dest-hero-overlay"></div>
+          <div class="dest-hero-info">
+            <div class="dest-region-badge" id="destRegionBadge"></div>
+            <h2 class="dest-h2" id="destName"></h2>
+            <p class="dest-tagline" id="destTagline"></p>
+            <div class="dest-meta-row" id="destMetaRow"></div>
           </div>
-
-          <!-- Tips Section -->
-          <div class="tips-section" id="tipsSection">
-            <h3 class="sub-section-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Pro Travel Tips
-            </h3>
-            <div class="tips-list" id="tipsList"></div>
-          </div>
-
-          <!-- Related Destinations -->
-          <div class="related-section" id="relatedSection">
-            <h3 class="sub-section-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              You Might Also Love
-            </h3>
-            <div class="related-grid" id="relatedGrid"></div>
-          </div>
-
-          <button class="new-search-btn" onclick="resetSearch()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-            Explore Another Destination
+          <button class="gallery-btn" id="galleryBtn" onclick="openGallery()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            View All Photos
           </button>
         </div>
 
-        <!-- Error State -->
-        <div class="result-error" id="resultError" style="display:none">
-          <div class="error-icon">⚠</div>
-          <h3>Could not fetch travel data</h3>
-          <p id="errorMessage">Please check your API key or try again.</p>
-          <button onclick="handleSearch()">Try Again</button>
+        <!-- QUICK STATS TABS -->
+        <div class="tabs-nav" id="tabsNav">
+          <button class="tab-btn active" data-tab="overview">📊 Overview</button>
+          <button class="tab-btn" data-tab="seasons">📅 When to Go</button>
+          <button class="tab-btn" data-tab="budget">💰 Budget</button>
+          <button class="tab-btn" data-tab="guide">📖 Travel Guide</button>
+          <button class="tab-btn" data-tab="photos">📸 Photos</button>
+          <button class="tab-btn" data-tab="tips">💡 Pro Tips</button>
+          <button class="tab-btn" data-tab="similar">🗺️ Similar</button>
         </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════ FEATURES ═════════════════════════════ -->
-  <section class="features-section" id="features">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Why World AI 360</span>
-        <h2 class="section-title">Everything You Need to Travel Smart</h2>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🌍</div>
-          <h3>Every Destination</h3>
-          <p>From the busiest cities to the most remote villages — if it exists, our AI knows about it.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📅</div>
-          <h3>Season Intelligence</h3>
-          <p>Know exactly when to go. Month-by-month weather, crowd levels, and event calendars.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">💰</div>
-          <h3>Real Cost Estimates</h3>
-          <p>Accommodation, food, transport, activities — get realistic budget breakdowns per day.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🗺️</div>
-          <h3>Smart Itineraries</h3>
-          <p>AI-crafted day-by-day plans optimized for time, budget, and your travel style.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🛂</div>
-          <h3>Visa & Entry Info</h3>
-          <p>Stay informed about visa requirements, entry rules, and document checklists.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌐</div>
-          <h3>Local Culture Guide</h3>
-          <p>Language tips, customs, etiquette, food, festivals — travel like a local.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════ TRENDING ═════════════════════════════ -->
-  <section class="trending-section" id="trending">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Trending Now</span>
-        <h2 class="section-title">Where the World is Heading</h2>
-      </div>
-      <div class="trending-grid" id="trendingGrid">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <div class="logo">
-            <span class="logo-icon">◎</span>
-            <span class="logo-text">World<em>AI</em><strong>360</strong></span>
-          </div>
-          <p>AI-powered travel intelligence for the entire world. Ask anything, explore everything.</p>
-        </div>
-        <div class="footer-links">
-          <div class="footer-col">
-            <h4>Explore</h4>
-            <a href="#">Asia</a>
-            <a href="#">Europe</a>
-            <a href="#">Americas</a>
-            <a href="#">Africa</a>
-            <a href="#">Oceania</a>
-          </div>
-          <div class="footer-col">
-            <h4>Travel Type</h4>
-            <a href="#">Solo Travel</a>
-            <a href="#">Family Trips</a>
-            <a href="#">Honeymoon</a>
-            <a href="#">Adventure</a>
-            <a href="#">Luxury</a>
+        <!-- TAB: OVERVIEW -->
+        <div class="tab-panel active" id="tab-overview">
+          <div class="info-grid" id="infoGrid"></div>
+          <div class="dest-map-placeholder" id="destMap">
+            <div class="map-inner">
+              <div class="map-pin-anim">📍</div>
+              <p id="mapDestName"></p>
+            </div>
           </div>
         </div>
+
+        <!-- TAB: SEASONS -->
+        <div class="tab-panel" id="tab-seasons">
+          <div class="season-grid" id="seasonGrid"></div>
+          <div class="month-calendar" id="monthCalendar"></div>
+        </div>
+
+        <!-- TAB: BUDGET -->
+        <div class="tab-panel" id="tab-budget">
+          <div class="currency-note" id="currencyNote"></div>
+          <div class="budget-grid" id="budgetGrid"></div>
+          <div class="cost-compare" id="costCompare"></div>
+        </div>
+
+        <!-- TAB: GUIDE -->
+        <div class="tab-panel" id="tab-guide">
+          <div class="ai-response-card">
+            <div class="ai-card-head">
+              <div class="ai-avatar-ring">
+                <div class="ai-avatar">AI</div>
+              </div>
+              <div>
+                <p class="ai-name">World AI 360</p>
+                <p class="ai-role">Global Travel Intelligence Engine</p>
+              </div>
+              <div class="ai-powered-badge">Powered by Claude</div>
+            </div>
+            <div class="ai-body" id="aiBody"></div>
+          </div>
+        </div>
+
+        <!-- TAB: PHOTOS -->
+        <div class="tab-panel" id="tab-photos">
+          <div class="photos-intro">
+            <h3>Destination Photo Gallery</h3>
+            <p>Click any photo to view full screen. Hover for location details.</p>
+          </div>
+          <div class="photos-masonry" id="photosMasonry"></div>
+        </div>
+
+        <!-- TAB: TIPS -->
+        <div class="tab-panel" id="tab-tips">
+          <div class="tips-grid" id="tipsGrid"></div>
+        </div>
+
+        <!-- TAB: SIMILAR -->
+        <div class="tab-panel" id="tab-similar">
+          <div class="similar-grid" id="similarGrid"></div>
+        </div>
+
+        <button class="new-search-btn" onclick="resetSearch()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Explore Another Destination
+        </button>
       </div>
-      <div class="footer-bottom">
-        <p>© 2025 World AI 360. Built By Kamlesh Yadav.</p>
-        <p class="footer-note">Powered by Kamlesh Yadav — Travel data may vary. Always verify with official sources.</p>
+
+      <!-- ERROR -->
+      <div class="result-error" id="resultError" style="display:none">
+        <div class="err-icon">⚠</div>
+        <h3>Could Not Load Travel Data</h3>
+        <p id="errorMessage">Please check your API key or try again.</p>
+        <button onclick="handleSearch()">Try Again</button>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<!-- GALLERY LIGHTBOX -->
+<div class="gallery-lightbox" id="galleryLightbox">
+  <div class="gl-overlay" onclick="closeGallery()"></div>
+  <div class="gl-container">
+    <div class="gl-header">
+      <h3 id="glTitle">Photo Gallery</h3>
+      <div class="gl-controls">
+        <span id="glCounter">1 / 60</span>
+        <button class="gl-close" onclick="closeGallery()">✕</button>
+      </div>
+    </div>
+    <div class="gl-main">
+      <button class="gl-prev" onclick="galleryPrev()">‹</button>
+      <div class="gl-img-wrap">
+        <img id="glImg" src="" alt="" loading="lazy"/>
+        <div class="gl-caption" id="glCaption"></div>
+      </div>
+      <button class="gl-next" onclick="galleryNext()">›</button>
+    </div>
+    <div class="gl-thumbs" id="glThumbs"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <span class="sec-tag">Why World AI 360</span>
+      <h2 class="sec-title">Enterprise-Grade Travel Intelligence</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-num">01</div>
+        <div class="feat-icon">🌍</div>
+        <h3>Every Destination</h3>
+        <p>From mega-cities to remote villages. If it exists, our AI has deep knowledge about it with location-aware personalization.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">02</div>
+        <div class="feat-icon">📅</div>
+        <h3>Season Intelligence</h3>
+        <p>Month-by-month weather, crowd levels, local events, festival calendars and the absolute best windows to visit.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">03</div>
+        <div class="feat-icon">💰</div>
+        <h3>Real Cost Estimates</h3>
+        <p>Accommodation, food, transport and activities. Realistic daily budgets in 25+ currencies, updated for your origin.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">04</div>
+        <div class="feat-icon">📸</div>
+        <h3>Photo Intelligence</h3>
+        <p>60–70 real destination photos per result. Clickable full-screen gallery with location labels and landmark details.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">05</div>
+        <div class="feat-icon">🛂</div>
+        <h3>Visa & Entry Info</h3>
+        <p>Stay informed about visa requirements, entry rules, vaccination requirements and document checklists for your passport.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-num">06</div>
+        <div class="feat-icon">🎯</div>
+        <h3>Personalized Guides</h3>
+        <p>Results adapt to your trip type, budget, and detected location. Backpacker routes differ from luxury itineraries.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRENDING -->
+<section class="trending-section" id="trending">
+  <div class="container">
+    <div class="section-header">
+      <span class="sec-tag">Trending Now</span>
+      <h2 class="sec-title">Where The World Is Heading</h2>
+    </div>
+    <div class="trending-grid" id="trendingGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+              <circle cx="16" cy="16" r="14" stroke="#D4AF37" stroke-width="1.5"/>
+              <ellipse cx="16" cy="16" rx="6" ry="14" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
+              <line x1="2" y1="16" x2="30" y2="16" stroke="#D4AF37" stroke-width="1" opacity="0.4"/>
+              <circle cx="16" cy="16" r="2" fill="#D4AF37"/>
+            </svg>
+          </div>
+          <span class="logo-text">World<em>AI</em><strong>360</strong></span>
+        </div>
+        <p>AI-powered travel intelligence. Ask anything, explore everything.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col"><h4>Regions</h4><a href="#">Asia Pacific</a><a href="#">Europe</a><a href="#">Americas</a><a href="#">Africa</a><a href="#">Middle East</a></div>
+        <div class="footer-col"><h4>Travel</h4><a href="#">Solo Travel</a><a href="#">Family Trips</a><a href="#">Honeymoon</a><a href="#">Adventure</a><a href="#">Luxury</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 World AI 360. Built by Kamlesh Yadav.</p>
+      <p class="footer-note">Travel data is AI-generated. Always verify with official sources.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
