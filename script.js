@@ -1046,3 +1046,168 @@ function exploreFromWishlist(query) {
 document.addEventListener('DOMContentLoaded', function() {
   updateWishlistCount();
 });
+// ═══════════ DESTINATION COMPARE ═══════════
+let isCompareLoading = false;
+
+// Enter key support for compare inputs
+document.addEventListener('DOMContentLoaded', function() {
+  var i1 = document.getElementById('compareInput1');
+  var i2 = document.getElementById('compareInput2');
+  if (i1) i1.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleCompare(); });
+  if (i2) i2.addEventListener('keydown', function(e) { if (e.key === 'Enter') handleCompare(); });
+});
+
+async function handleCompare() {
+  var dest1 = (document.getElementById('compareInput1').value || '').trim();
+  var dest2 = (document.getElementById('compareInput2').value || '').trim();
+
+  if (!dest1 || !dest2) {
+    alert('Dono destinations type karo!');
+    return;
+  }
+  if (isCompareLoading) return;
+
+  isCompareLoading = true;
+  var btn = document.querySelector('.compare-btn');
+  btn.disabled = true;
+
+  document.getElementById('compareResult').style.display = 'none';
+  document.getElementById('compareError').style.display  = 'none';
+  document.getElementById('compareLoading').style.display = 'block';
+
+  var prompt = buildComparePrompt(dest1, dest2);
+
+  try {
+    var responseText = await callGemini(prompt);
+    var parsed       = parseCompareResponse(responseText);
+    renderCompareResult(parsed, dest1, dest2);
+  } catch(err) {
+    document.getElementById('compareErrorMsg').textContent = err.message || 'Error. Try again.';
+    document.getElementById('compareError').style.display  = 'block';
+  }
+
+  document.getElementById('compareLoading').style.display = 'none';
+  isCompareLoading = false;
+  btn.disabled = false;
+}
+
+function buildComparePrompt(dest1, dest2) {
+  return 'Compare these two travel destinations for a ' + selectedTripType + ' traveler with ' + selectedBudget + ' budget.\n' +
+    'Destination 1: ' + dest1 + '\n' +
+    'Destination 2: ' + dest2 + '\n' +
+    'IMPORTANT: All prices in USD using $ symbol.\n' +
+    'Respond ONLY with valid JSON, no markdown, no backticks:\n' +
+    '{\n' +
+    '  "winner": "Destination name that wins overall",\n' +
+    '  "winnerReason": "One line why it wins",\n' +
+    '  "dest1": {\n' +
+    '    "name": "Full name",\n' +
+    '    "country": "Country",\n' +
+    '    "flag": "🌍",\n' +
+    '    "dailyBudget": "$40-$80",\n' +
+    '    "bestSeason": "Oct-Apr",\n' +
+    '    "visa": "Visa on Arrival / Free / Required",\n' +
+    '    "avgFlight": "$600-$900",\n' +
+    '    "safetyScore": "8/10",\n' +
+    '    "language": "English / Local",\n' +
+    '    "idealDays": "7-10 days",\n' +
+    '    "highlights": "Top 2-3 things in one line"\n' +
+    '  },\n' +
+    '  "dest2": {\n' +
+    '    "name": "Full name",\n' +
+    '    "country": "Country",\n' +
+    '    "flag": "🌏",\n' +
+    '    "dailyBudget": "$30-$60",\n' +
+    '    "bestSeason": "Nov-Mar",\n' +
+    '    "visa": "Visa on Arrival / Free / Required",\n' +
+    '    "avgFlight": "$500-$800",\n' +
+    '    "safetyScore": "7/10",\n' +
+    '    "language": "Thai / English",\n' +
+    '    "idealDays": "10-14 days",\n' +
+    '    "highlights": "Top 2-3 things in one line"\n' +
+    '  }\n' +
+    '}';
+}
+
+function parseCompareResponse(text) {
+  var clean = text.trim()
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/\s*```$/i, '');
+  return JSON.parse(clean);
+}
+
+function renderCompareResult(data, query1, query2) {
+  var d1        = data.dest1;
+  var d2        = data.dest2;
+  var winnerIs1 = data.winner && data.winner.toLowerCase().indexOf(d1.name.toLowerCase().split(',')[0]) >= 0;
+
+  var fields = [
+    { label: '💰 Daily Budget', key: 'dailyBudget',  monetary: true  },
+    { label: '📅 Best Season',  key: 'bestSeason',   monetary: false },
+    { label: '🛂 Visa',         key: 'visa',         monetary: false },
+    { label: '✈️ Avg Flight',   key: 'avgFlight',    monetary: true  },
+    { label: '🛡️ Safety',       key: 'safetyScore',  monetary: false },
+    { label: '🗣️ Language',     key: 'language',     monetary: false },
+    { label: '⏱️ Ideal Stay',   key: 'idealDays',    monetary: false },
+    { label: '⭐ Highlights',   key: 'highlights',   monetary: false },
+  ];
+
+  function buildRows(dest, isWinner) {
+    return fields.map(function(f) {
+      var val = dest[f.key] || '—';
+      if (f.monetary) val = convertPriceStr(val);
+      var betterClass = '';
+      if (f.key === 'dailyBudget' || f.key === 'avgFlight') {
+        betterClass = isWinner ? ' better' : '';
+      }
+      if (f.key === 'safetyScore') {
+        betterClass = isWinner ? ' better' : '';
+      }
+      return '<div class="compare-row">' +
+        '<span class="compare-row-label">' + f.label + '</span>' +
+        '<span class="compare-row-val' + betterClass + '">' + val + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  var html =
+    '<div class="compare-winner-banner">' +
+      '<div class="compare-winner-badge">🏆 ' + (data.winner || '') + ' wins — ' + (data.winnerReason || '') + '</div>' +
+    '</div>' +
+    '<div class="compare-cards">' +
+      '<div class="compare-card' + (winnerIs1 ? ' winner' : '') + '">' +
+        '<div class="compare-card-header">' +
+          '<div>' +
+            '<div class="compare-card-name">' + (d1.flag || '') + ' ' + d1.name + '</div>' +
+            '<div class="compare-card-country">' + d1.country + '</div>' +
+          '</div>' +
+          (winnerIs1 ? '<span class="compare-winner-tag">🏆 WINNER</span>' : '') +
+        '</div>' +
+        '<div class="compare-rows">' + buildRows(d1, winnerIs1) + '</div>' +
+      '</div>' +
+      '<div class="compare-card' + (!winnerIs1 ? ' winner' : '') + '">' +
+        '<div class="compare-card-header">' +
+          '<div>' +
+            '<div class="compare-card-name">' + (d2.flag || '') + ' ' + d2.name + '</div>' +
+            '<div class="compare-card-country">' + d2.country + '</div>' +
+          '</div>' +
+          (!winnerIs1 ? '<span class="compare-winner-tag">🏆 WINNER</span>' : '') +
+        '</div>' +
+        '<div class="compare-rows">' + buildRows(d2, !winnerIs1) + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="compare-explore-btns">' +
+      '<button class="compare-explore-btn" onclick="searchFromCard(\'' + escapeAttr('Complete travel guide to ' + d1.name) + '\')">' +
+        'Explore ' + d1.name + ' →' +
+      '</button>' +
+      '<button class="compare-explore-btn" onclick="searchFromCard(\'' + escapeAttr('Complete travel guide to ' + d2.name) + '\')">' +
+        'Explore ' + d2.name + ' →' +
+      '</button>' +
+    '</div>';
+
+  var resultEl = document.getElementById('compareResult');
+  resultEl.innerHTML = html;
+  resultEl.style.display = 'block';
+  resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
