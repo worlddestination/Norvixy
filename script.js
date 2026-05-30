@@ -9,7 +9,7 @@
 // Replace with your Gemini API key or inject via GitHub Actions / env variable
 const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY';
 const GEMINI_MODEL   = 'gemini-3-flash-preview';
-const UNSPLASH_SOURCE = 'https://source.unsplash.com/featured/800x500?';
+const UNSPLASH_SOURCE = 'https://picsum.photos/seed/';
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let selectedTripType   = 'Backpacker';
@@ -334,9 +334,9 @@ function renderResult(data, originalQuery) {
   // ── Images ──
   const imgGrid = document.getElementById('destImageGrid');
   const terms   = data.searchImageTerms || [data.destination, data.country, 'travel'];
-  imgGrid.innerHTML = terms.slice(0, 3).map(term =>
-    `<img src="${UNSPLASH_SOURCE}${encodeURIComponent(term)}&sig=${Math.random()}" alt="${term}" loading="lazy" onerror="this.style.background='#1A2130'">`
-  ).join('');
+  imgGrid.innerHTML = terms.slice(0, 3).map((term, i) =>
+    `<img src="https://picsum.photos/seed/${encodeURIComponent(term)}${i}/800/500" alt="${term}" loading="lazy">`
+).join('');
 
   // ── Dest header ──
   document.getElementById('destBadge').textContent    = `${data.flag || '🌍'} ${data.region || data.country}`;
