@@ -386,12 +386,12 @@ function buildPrompt(query, tripType, budget) {
     '  "flag": "🌍",\n' +
     '  "searchImageTerms": ["term1 travel", "term2 landscape", "term3 culture"],\n' +
     '  "quickInfo": [\n' +
-    '    { "icon": "🌡️", "label": "Best Season", "value": "Oct–Apr", "sub": "Warm & dry" },\n' +
-    '    { "icon": "💰", "label": "Daily Budget", "value": "$40–$80", "sub": "Mid-range" },\n' +
-    '    { "icon": "✈️", "label": "Avg Flight", "value": "$800–$1200", "sub": "From US/Europe" },\n' +
-    '    { "icon": "🛂", "label": "Visa", "value": "Visa on Arrival", "sub": "30 days" },\n' +
+    '    { "icon": "🌡️", "label": "Best Season", "value": "Oct–Apr", "sub": "Avg 25°C • Low humidity • No rain" },\n' +
+    '    { "icon": "💰", "label": "Daily Budget", "value": "$40–$80", "sub": "Hotels+Food+Transport included" },\n' +
+    '    { "icon": "✈️", "label": "Avg Flight", "value": "$800–$1200", "sub": "From nearest major airport" },\n' +
+    '     { "icon": "🛂", "label": "Visa", "value": "Visa on Arrival", "sub": "30 days • $25 fee • Apply online" },\n' +
     '    { "icon": "🗣️", "label": "Language", "value": "Bahasa/English", "sub": "English common" },\n' +
-    '    { "icon": "⏱️", "label": "Ideal Stay", "value": "7–14 days", "sub": "Recommended" }\n' +
+    '     { "icon": "⏱️", "label": "Ideal Stay", "value": "7–14 days", "sub": "Min 5 days • Ideal 10 days" }\n' +
     '  ],\n' +
     '  "seasons": [\n' +
     '    { "name": "Winter", "months": "Dec – Feb", "desc": "Short description", "best": false },\n' +
@@ -438,7 +438,7 @@ function renderResult(data, originalQuery) {
 
   imgGrid.innerHTML = terms.slice(0, 3).map(function(term, idx) {
     return '<img src="https://picsum.photos/seed/' + encodeURIComponent(term) + '/800/500" alt="' + term + '" loading="lazy" ' +
-      'style="cursor:pointer" onclick="openLightbox(' + (idx * 22) + ', window._allPhotos)" ' +
+      'style="cursor:pointer" 'onclick="openLightbox(' + (idx * 22) + ')" ' +
       'onerror="this.style.background=\'#1A2130\'">';
   }).join('');
 
@@ -501,7 +501,7 @@ function renderDestMeta(data) {
 function renderQuickInfo(quickInfo) {
   const infoGrid = document.getElementById('infoGrid');
   infoGrid.innerHTML = (quickInfo || []).map(function(item, i) {
-    const isMonetary = item.label === 'Daily Budget' || item.label === 'Avg Flight';
+    const isMonetary = item.label === 'Daily Budget' || item.label === 'Avg Flight' || item.label === 'Visa';
     const value      = isMonetary ? convertPriceStr(item.value) : item.value;
     return '<div class="info-card" style="animation-delay:' + (i * 0.05) + 's">' +
       '<div class="info-card-icon">' + item.icon + '</div>' +
@@ -618,7 +618,8 @@ document.addEventListener('click', function(e) {
 });
 
 // LIGHTBOX
-function openLightbox(startIdx, photos) {
+function openLightbox(startIdx) {
+  var photos = window._allPhotos || [];
   var current = startIdx;
 
   var lb = document.createElement('div');
