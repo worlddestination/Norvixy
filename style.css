@@ -2404,3 +2404,121 @@ body.cursor-hover .cursor-ring {
   font-size: 15px;
   line-height: 1.9;
 }
+/* ═══════════ WEATHER CHART ═══════════ */
+.weather-chart-section {
+  margin-top: 2rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 20px;
+  padding: 2rem;
+}
+
+.weather-chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  margin: 1.5rem 0 1rem;
+}
+
+.weather-chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.weather-legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 1.2rem;
+}
+
+.weather-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: rgba(232,230,224,0.55);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.temp   { background: #E8C96A; }
+.legend-dot.rain   { background: #38BDF8; }
+.legend-dot.crowd  { background: #F87171; }
+
+.weather-month-detail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.weather-month-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.weather-month-card:hover {
+  border-color: rgba(201,168,76,0.3);
+  background: rgba(201,168,76,0.05);
+}
+
+.weather-month-card.best-month {
+  border-color: rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.07);
+}
+
+.wmc-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(232,230,224,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.wmc-temp {
+  font-size: 18px;
+  font-weight: 800;
+  color: #E8C96A;
+  margin-bottom: 2px;
+}
+
+.wmc-rain {
+  font-size: 11px;
+  color: #38BDF8;
+  margin-bottom: 2px;
+}
+
+.wmc-crowd {
+  font-size: 11px;
+  color: rgba(232,230,224,0.4);
+}
+
+.wmc-badge {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 9px;
+  background: rgba(201,168,76,0.2);
+  color: #C9A84C;
+  padding: 2px 7px;
+  border-radius: 50px;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .weather-chart-wrap { height: 200px; }
+  .weather-month-detail {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
