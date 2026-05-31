@@ -2150,3 +2150,513 @@ function renderDreamResults(trips) {
   document.getElementById('dreamResults').style.display = 'block';
   document.getElementById('dreamResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+// ═══════════ PDF TRIP REPORT EXPORT ═══════════
+async function exportTripPDF() {
+  if (!lastParsedData) return;
+
+  var btn = document.getElementById('pdfExportBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span>PDF ban raha hai...</span>';
+
+  try {
+    var d    = lastParsedData;
+    var jsPDF = window.jspdf.jsPDF;
+    var doc  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    var W    = 210;
+    var margin = 18;
+    var y    = 0;
+    var c    = CURRENCIES[selectedCurrency];
+
+    // ── helper functions ──────────────────────────────
+    function addPage() {
+      doc.addPage();
+      y = 20;
+      // header line on every page
+      doc.setDrawColor(201, 168, 76);
+      doc.setLineWidth(0.4);
+      doc.line(margin, 12, W - margin, 12);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 130, 80);
+      doc.text('WorldAI360  •  ' + d.destination + '  •  AI Travel Report', margin, 10);
+      doc.setTextColor(30, 30, 30);
+    }
+
+    function checkY(needed) {
+      if (y + needed > 272) addPage();
+    }
+
+    function sectionTitle(title) {
+      checkY(14);
+      doc.setFillColor(245, 240, 220);
+      doc.roundedRect(margin, y, W - margin * 2, 9, 2, 2, 'F');
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(120, 85, 20);
+      doc.text(title, margin + 4, y + 6.2);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(30, 30, 30);
+      y += 13;
+    }
+
+    function bodyText(text, indent) {
+      indent = indent || 0;
+      var lines = doc.splitTextToSize(text, W - margin * 2 - indent);
+      lines.forEach(function(line) {
+        checkY(6);
+        doc.setFontSize(9.5);
+        doc.setTextColor(50, 50, 50);
+        doc.text(line, margin + indent, y);
+        y += 5.5;
+      });
+    }
+
+    function bulletPoint(text) {
+      checkY(6);
+      doc.setFontSize(9);
+      doc.setTextColor(201, 168, 76);
+      doc.text('•', margin + 2, y);
+      doc.setTextColor(50, 50, 50);
+      var lines = doc.splitTextToSize(text, W - margin * 2 - 8);
+      lines.forEach(function(line, i) {
+        doc.text(line, margin + 8, y);
+        y += 5.2;
+      });
+    }
+
+    function twoCol(label, value) {
+      checkY(7);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(80, 80, 80);
+      doc.text(label + ':', margin + 2, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(30, 30, 30);
+      doc.text(String(value), margin + 50, y);
+      y += 6;
+    }
+
+    // ── PAGE 1 — COVER ────────────────────────────────
+    // Dark header block
+    doc.setFillColor(10, 15, 26);
+    doc.rect(0, 0, W, 70, 'F');
+
+    // Gold accent line
+    doc.setFillColor(201, 168, 76);
+    doc.rect(0, 70, W, 1.5, 'F');
+
+    // WorldAI360 branding
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(150, 130, 80);
+    doc.text('◎  WORLDAI360  —  AI TRAVEL INTELLIGENCE', margin, 16);
+
+    // Destination name
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(201, 168, 76);
+    var destName = d.destination || 'Travel Report';
+    // Long name split karo
+    if (destName.length > 22) {
+      doc.setFontSize(20);
+    }
+    doc.text(destName, margin, 38);
+
+    // Country + region
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(180, 170, 150);
+    doc.text((d.flag || '🌍') + '  ' + (d.country || '') + '   •   ' + (d.region || ''), margin, 50);
+
+    // Tagline
+    doc.setFontSize(10);
+    doc.setTextColor(140, 130, 110);
+    doc.setFont('helvetica', 'italic');
+    var tagLines = doc.splitTextToSize(d.tagline || '', W - margin * 2);
+    doc.text(tagLines, margin, 62);
+
+    // Reset
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 30, 30);
+
+    y = 82;
+
+    // ── QUICK INFO GRID ───────────────────────────────
+    sectionTitle('✈  Quick Info');
+    var qi = d.quickInfo || [];
+    var colW = (W - margin * 2) / 3;
+    var row = 0;
+    qi.forEach(function(item, i) {
+      var col = i % 3;
+      if (col === 0 && i > 0) { y += 20; row++; }
+      var x = margin + col * colW;
+      checkY(20);
+      doc.setFillColor(248, 246, 240);
+      doc.roundedRect(x, y - 2, colW - 3, 18, 2, 2, 'F');
+      doc.setFontSize(7.5);
+      doc.setTextColor(150, 130, 80);
+      doc.text(item.icon + ' ' + item.label, x + 3, y + 4);
+      doc.setFontSize(9.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(30, 30, 30);
+      var val = (item.label === 'Daily Budget' || item.label === 'Avg Flight') ?
+        convertPriceStr(item.value) : item.value;
+      doc.text(val, x + 3, y + 10);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(120, 120, 120);
+      var subLines = doc.splitTextToSize(item.sub || '', colW - 6);
+      doc.text(subLines[0] || '', x + 3, y + 15);
+    });
+    y += 24;
+
+    // ── BEST SEASONS ──────────────────────────────────
+    checkY(10);
+    sectionTitle('📅  Best Time to Visit');
+    (d.seasons || []).forEach(function(s) {
+      checkY(12);
+      if (s.best) {
+        doc.setFillColor(240, 255, 240);
+        doc.roundedRect(margin, y - 2, W - margin * 2, 10, 2, 2, 'F');
+      }
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(s.best ? 30 : 60, s.best ? 100 : 60, s.best ? 30 : 60);
+      doc.text((s.best ? '⭐ ' : '   ') + s.name + '  (' + s.months + ')', margin + 3, y + 5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(80, 80, 80);
+      doc.setFontSize(8.5);
+      var descLines = doc.splitTextToSize(s.desc || '', W - margin * 2 - 80);
+      doc.text(descLines[0] || '', margin + 75, y + 5);
+      y += 11;
+    });
+    y += 4;
+
+    // ── BUDGET BREAKDOWN ──────────────────────────────
+    checkY(10);
+    sectionTitle('💰  Budget Breakdown  (' + c.flag + ' ' + selectedCurrency + ')');
+    (d.budgetBreakdown || []).forEach(function(b) {
+      checkY(8);
+      doc.setFontSize(9.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(b.featured ? 120 : 60, b.featured ? 85 : 60, b.featured ? 20 : 60);
+      doc.text((b.featured ? '★ ' : '  ') + b.tier + '  —  ' + convertPriceStr(b.pricePerDay) + ' / person / day', margin + 2, y);
+      y += 5.5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8.5);
+      doc.setTextColor(90, 90, 90);
+      (b.items || []).forEach(function(item) {
+        checkY(5.5);
+        doc.text('       ' + item.label + ':  ' + convertPriceStr(item.value), margin + 2, y);
+        y += 5;
+      });
+      y += 3;
+    });
+
+    // ── NEW PAGE — AI TRAVEL GUIDE ────────────────────
+    addPage();
+    sectionTitle('🌍  AI Travel Guide');
+
+    // Strip markdown
+    var aiText = (d.aiResponse || '')
+      .replace(/###\s*/g, '\n')
+      .replace(/##\s*/g, '\n')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/^- /gm, '• ')
+      .trim();
+
+    var aiLines = aiText.split('\n');
+    aiLines.forEach(function(line) {
+      line = line.trim();
+      if (!line) { y += 2; return; }
+      if (line.startsWith('###') || line.startsWith('##') ||
+          (line.length < 50 && line === line.toUpperCase())) {
+        checkY(10);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(120, 85, 20);
+        doc.text(line.replace(/^#+\s*/, ''), margin + 2, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(50, 50, 50);
+        y += 7;
+      } else if (line.startsWith('•')) {
+        bulletPoint(line.replace(/^•\s*/, ''));
+      } else {
+        bodyText(line);
+      }
+    });
+
+    // ── PRO TIPS ──────────────────────────────────────
+    checkY(14);
+    sectionTitle('💡  Pro Travel Tips');
+    (d.tips || []).forEach(function(tip, i) {
+      checkY(8);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(201, 168, 76);
+      doc.text(String(i + 1).padStart(2, '0') + '.', margin + 2, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(50, 50, 50);
+      var tipLines = doc.splitTextToSize(tip, W - margin * 2 - 12);
+      tipLines.forEach(function(tl) {
+        checkY(5.5);
+        doc.text(tl, margin + 12, y);
+        y += 5.2;
+      });
+      y += 2;
+    });
+
+    // ── RELATED DESTINATIONS ──────────────────────────
+    checkY(14);
+    sectionTitle('🗺️  You Might Also Love');
+    (d.related || []).forEach(function(r) {
+      checkY(8);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(30, 30, 30);
+      doc.text(r.emoji + '  ' + r.name + '  —  ' + r.country, margin + 3, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.setFontSize(8.5);
+      doc.text(r.desc || '', margin + 3, y + 5);
+      y += 11;
+    });
+
+    // ── LAST PAGE FOOTER ──────────────────────────────
+    checkY(20);
+    y += 6;
+    doc.setDrawColor(201, 168, 76);
+    doc.setLineWidth(0.3);
+    doc.line(margin, y, W - margin, y);
+    y += 6;
+    doc.setFontSize(8);
+    doc.setTextColor(150, 130, 80);
+    doc.text('Generated by WorldAI360  •  AI-Powered Travel Intelligence  •  worldai360.com', margin, y);
+    y += 5;
+    doc.setFontSize(7.5);
+    doc.setTextColor(160, 160, 160);
+    doc.text('Travel data is AI-generated. Always verify with official sources before traveling.', margin, y);
+
+    // ── SAVE ──────────────────────────────────────────
+    var filename = (d.destination || 'trip')
+      .replace(/[^a-zA-Z0-9\s]/g, '')
+      .replace(/\s+/g, '-')
+      .toLowerCase() + '-travel-report.pdf';
+
+    doc.save(filename);
+
+  } catch(err) {
+    console.error('PDF error:', err);
+    alert('PDF export mein error: ' + err.message);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span>Download PDF Trip Report</span>';
+}
+// ═══════════ 3D INTERACTIVE GLOBE ═══════════
+var globeInstance = null;
+var globeInitialized = false;
+
+var globeDestinations = [
+  { name: 'Bali',         country: 'Indonesia',  lat:  -8.34,  lng: 115.09, color: '#C9A84C', query: 'Complete travel guide to Bali Indonesia'           },
+  { name: 'Paris',        country: 'France',      lat:  48.85,  lng:   2.35, color: '#C9A84C', query: 'Complete travel guide to Paris France'             },
+  { name: 'Tokyo',        country: 'Japan',       lat:  35.68,  lng: 139.69, color: '#C9A84C', query: 'Complete travel guide to Tokyo Japan'              },
+  { name: 'New York',     country: 'USA',         lat:  40.71,  lng: -74.00, color: '#C9A84C', query: 'Complete travel guide to New York USA'             },
+  { name: 'Dubai',        country: 'UAE',         lat:  25.20,  lng:  55.27, color: '#C9A84C', query: 'Complete travel guide to Dubai UAE'                },
+  { name: 'London',       country: 'UK',          lat:  51.50,  lng:  -0.12, color: '#C9A84C', query: 'Complete travel guide to London UK'                },
+  { name: 'Sydney',       country: 'Australia',   lat: -33.86,  lng: 151.20, color: '#C9A84C', query: 'Complete travel guide to Sydney Australia'         },
+  { name: 'Rome',         country: 'Italy',       lat:  41.90,  lng:  12.49, color: '#C9A84C', query: 'Complete travel guide to Rome Italy'               },
+  { name: 'Maldives',     country: 'Maldives',    lat:   3.20,  lng:  73.22, color: '#4ade80', query: 'Complete travel guide to Maldives'                 },
+  { name: 'Santorini',    country: 'Greece',      lat:  36.39,  lng:  25.46, color: '#C9A84C', query: 'Complete travel guide to Santorini Greece'         },
+  { name: 'Machu Picchu', country: 'Peru',        lat: -13.16,  lng: -72.54, color: '#f87171', query: 'Complete travel guide to Machu Picchu Peru'        },
+  { name: 'Cairo',        country: 'Egypt',       lat:  30.04,  lng:  31.23, color: '#C9A84C', query: 'Complete travel guide to Cairo Egypt'              },
+  { name: 'Bangkok',      country: 'Thailand',    lat:  13.75,  lng: 100.52, color: '#C9A84C', query: 'Complete travel guide to Bangkok Thailand'         },
+  { name: 'Cape Town',    country: 'South Africa',lat: -33.92,  lng:  18.42, color: '#4ade80', query: 'Complete travel guide to Cape Town South Africa'   },
+  { name: 'Kyoto',        country: 'Japan',       lat:  35.01,  lng: 135.76, color: '#f87171', query: 'Complete travel guide to Kyoto Japan'              },
+  { name: 'Barcelona',    country: 'Spain',       lat:  41.38,  lng:   2.17, color: '#C9A84C', query: 'Complete travel guide to Barcelona Spain'          },
+  { name: 'Istanbul',     country: 'Turkey',      lat:  41.01,  lng:  28.97, color: '#C9A84C', query: 'Complete travel guide to Istanbul Turkey'          },
+  { name: 'Singapore',    country: 'Singapore',   lat:   1.35,  lng: 103.82, color: '#4ade80', query: 'Complete travel guide to Singapore'                },
+  { name: 'Queenstown',   country: 'New Zealand', lat: -45.03,  lng: 168.66, color: '#f87171', query: 'Complete travel guide to Queenstown New Zealand'   },
+  { name: 'Marrakech',    country: 'Morocco',     lat:  31.63,  lng:  -7.99, color: '#f87171', query: 'Complete travel guide to Marrakech Morocco'        },
+  { name: 'Bengaluru',    country: 'India',       lat:  12.97,  lng:  77.59, color: '#60a5fa', query: 'Complete travel guide to Bengaluru India'          },
+  { name: 'Mumbai',       country: 'India',       lat:  19.07,  lng:  72.87, color: '#60a5fa', query: 'Complete travel guide to Mumbai India'             },
+  { name: 'Goa',          country: 'India',       lat:  15.29,  lng:  74.12, color: '#60a5fa', query: 'Complete travel guide to Goa India'                },
+  { name: 'Rajasthan',    country: 'India',       lat:  27.02,  lng:  74.21, color: '#60a5fa', query: 'Complete travel guide to Rajasthan India'          },
+  { name: 'Iceland',      country: 'Iceland',     lat:  64.96,  lng: -19.02, color: '#f87171', query: 'Complete travel guide to Iceland'                  },
+];
+
+function initGlobe() {
+  if (globeInitialized) return;
+
+  var container = document.getElementById('globeContainer');
+  if (!container) return;
+
+  // Size
+  var size = Math.min(window.innerWidth * 0.85, 680);
+  container.style.width  = size + 'px';
+  container.style.height = size + 'px';
+
+  // Wishlist pins gold mein dikhao
+  var wishlist = loadBucketList();
+  var allPoints = globeDestinations.map(function(d) {
+    var inWishlist = wishlist.some(function(w) {
+      return w.destination && w.destination.toLowerCase().indexOf(d.name.toLowerCase()) >= 0;
+    });
+    return Object.assign({}, d, {
+      color:  inWishlist ? '#ff6b6b' : d.color,
+      size:   inWishlist ? 0.6 : 0.45,
+      label:  d.name + '\n' + d.country
+    });
+  });
+
+  try {
+    globeInstance = Globe()(container)
+      // Earth texture
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg')
+      .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+      .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
+
+      // Atmosphere
+      .showAtmosphere(true)
+      .atmosphereColor('#1a4080')
+      .atmosphereAltitude(0.15)
+
+      // Points (destination pins)
+      .pointsData(allPoints)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointColor('color')
+      .pointRadius('size')
+      .pointAltitude(0.02)
+      .pointResolution(12)
+
+      // Hover tooltip
+      .onPointHover(function(point) {
+        var tooltip = document.getElementById('globeTooltip');
+        if (point) {
+          document.getElementById('globeTooltipFlag').textContent = '📍';
+          document.getElementById('globeTooltipName').textContent = point.name + ', ' + point.country;
+          tooltip.style.display = 'block';
+          container.style.cursor = 'pointer';
+        } else {
+          tooltip.style.display = 'none';
+          container.style.cursor = 'grab';
+        }
+      })
+
+      // Click — search trigger
+      .onPointClick(function(point) {
+        if (!point || !point.query) return;
+
+        // Ripple animation
+        showGlobeRipple(point);
+
+        // Scroll to search aur guide load karo
+        setTimeout(function() {
+          searchFromCard(point.query);
+        }, 600);
+      })
+
+      // Size
+      .width(size)
+      .height(size);
+
+    // Auto rotate
+    globeInstance.controls().autoRotate      = true;
+    globeInstance.controls().autoRotateSpeed = 0.6;
+    globeInstance.controls().enableZoom      = true;
+    globeInstance.controls().minDistance     = 150;
+    globeInstance.controls().maxDistance     = 500;
+
+    // India ke upar start karo (Bengaluru user hai)
+    globeInstance.pointOfView({ lat: 15, lng: 78, altitude: 2.2 }, 0);
+
+    globeInitialized = true;
+
+  } catch(err) {
+    console.error('Globe init error:', err);
+    container.innerHTML =
+      '<div style="color:rgba(255,255,255,0.4);text-align:center;padding:60px 20px;">' +
+      '🌍<br><br>Globe load nahi hua.<br>Page refresh karo.</div>';
+  }
+}
+
+function showGlobeRipple(point) {
+  if (!globeInstance) return;
+  var rings = [{ lat: point.lat, lng: point.lng, maxR: 3, propagationSpeed: 2, repeatPeriod: 700 }];
+  globeInstance
+    .ringsData(rings)
+    .ringColor(function() { return '#C9A84C'; })
+    .ringMaxRadius('maxR')
+    .ringPropagationSpeed('propagationSpeed')
+    .ringRepeatPeriod('repeatPeriod');
+
+  setTimeout(function() {
+    if (globeInstance) globeInstance.ringsData([]);
+  }, 2000);
+}
+
+// Globe tab mein aate hi initialize karo — IntersectionObserver se
+function initGlobeObserver() {
+  var section = document.getElementById('globeSection');
+  if (!section) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !globeInitialized) {
+        // Libraries load hone ka wait karo
+        setTimeout(initGlobe, 300);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observer.observe(section);
+}
+
+// Destination pills under globe
+function renderGlobeDestPills() {
+  var wrap = document.getElementById('globeDestPills');
+  if (!wrap) return;
+
+  var featured = globeDestinations.slice(0, 12);
+  wrap.innerHTML = featured.map(function(d) {
+    return '<button class="globe-dest-pill" onclick="flyToDestination(' +
+      d.lat + ',' + d.lng + ',\'' + escapeAttr(d.query) + '\')">' +
+      d.name +
+      '</button>';
+  }).join('');
+}
+
+function flyToDestination(lat, lng, query) {
+  if (globeInstance) {
+    // Rotate band karo jab fly kar rahe hain
+    globeInstance.controls().autoRotate = false;
+
+    globeInstance.pointOfView({ lat: lat, lng: lng, altitude: 1.5 }, 1200);
+
+    // 3 second baad wapas rotate shuru
+    setTimeout(function() {
+      if (globeInstance) globeInstance.controls().autoRotate = true;
+    }, 3000);
+  }
+
+  // Search trigger
+  setTimeout(function() {
+    searchFromCard(query);
+  }, 1400);
+}
+
+// Window resize pe globe resize karo
+window.addEventListener('resize', function() {
+  if (!globeInstance || !globeInitialized) return;
+  var size = Math.min(window.innerWidth * 0.85, 680);
+  globeInstance.width(size).height(size);
+  document.getElementById('globeContainer').style.width  = size + 'px';
+  document.getElementById('globeContainer').style.height = size + 'px';
+});
+
+// DOMContentLoaded pe observer aur pills init karo
+document.addEventListener('DOMContentLoaded', function() {
+  initGlobeObserver();
+  renderGlobeDestPills();
+});
