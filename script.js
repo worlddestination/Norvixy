@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initQuickPills();
   renderTrending();
   initCurrencySelector();
+   });
 // LOADER
 function initLoader() {
   const loader = document.getElementById('loader');
@@ -313,7 +314,7 @@ async function handleSearch() {
   showLoading();
   const prompt = buildPrompt(query, selectedTripType, selectedBudget);
   try {
-    const responseText = await callGemini(prompt);
+    const responseText = await callGroq(prompt);
     const parsed       = parseResponse(responseText);
     lastParsedData     = parsed;
     renderResult(parsed, query);
@@ -1133,7 +1134,7 @@ async function handleCompare() {
   var prompt = buildComparePrompt(dest1, dest2);
 
   try {
-    var responseText = await callGemini(prompt);
+    var responseText = await callGroq(prompt);
     var parsed       = parseCompareResponse(responseText);
     renderCompareResult(parsed, dest1, dest2);
   } catch(err) {
