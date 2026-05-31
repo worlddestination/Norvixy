@@ -1776,3 +1776,61 @@ function updateVisaInfo() {
     (v.notes ? '<div class="visa-detail-item full"><span class="vdi-label">Important Note</span><span class="vdi-val">' + v.notes + '</span></div>' : '') +
     (v.applyLink ? '<div class="visa-detail-item full"><a href="' + v.applyLink + '" target="_blank" class="visa-apply-link">🔗 Apply / Check Official Visa Site →</a></div>' : '');
 }
+// ═══════════ VOICE SEARCH ═══════════
+function startVoiceSearch() {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('Aapka browser voice search support nahi karta. Chrome use karo!');
+    return;
+  }
+
+  var btn  = document.getElementById('voiceBtn');
+  var icon = document.getElementById('voiceIcon');
+  var input = document.getElementById('searchInput');
+
+  var recog = new SpeechRecognition();
+  recog.lang = 'en-US';
+  recog.interimResults = true;
+  recog.maxAlternatives = 1;
+
+  // Listening shuru — button red ho jaata hai
+  btn.classList.add('voice-listening');
+  icon.innerHTML = '<circle cx="12" cy="12" r="10" fill="rgba(239,68,68,0.3)"/>' +
+    '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor"/>' +
+    '<path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor"/>' +
+    '<line x1="12" y1="19" x2="12" y2="23" stroke="currentColor"/>' +
+    '<line x1="8" y1="23" x2="16" y2="23" stroke="currentColor"/>';
+  input.placeholder = '🎙️ Bol raha hoon... sunna band karo toh ruko';
+
+  recog.onresult = function(e) {
+    var transcript = e.results[0][0].transcript;
+    input.value = transcript;
+    document.getElementById('searchClear').classList.add('visible');
+  };
+
+  recog.onend = function() {
+    // Button wapas normal
+    btn.classList.remove('voice-listening');
+    icon.innerHTML = '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>' +
+      '<path d="M19 10v2a7 7 0 0 1-14 0v-2"/>' +
+      '<line x1="12" y1="19" x2="12" y2="23"/>' +
+      '<line x1="8" y1="23" x2="16" y2="23"/>';
+    input.placeholder = "e.g. 'Best time to visit Switzerland'...";
+
+    // Agar kuch bola toh auto search
+    if (input.value.trim()) {
+      setTimeout(function() { handleSearch(); }, 500);
+    }
+  };
+
+  recog.onerror = function(e) {
+    btn.classList.remove('voice-listening');
+    input.placeholder = "e.g. 'Best time to visit Switzerland'...";
+    if (e.error === 'not-allowed') {
+      alert('Microphone permission do browser mein!');
+    }
+  };
+
+  recog.start();
+}
