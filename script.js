@@ -8,7 +8,7 @@
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 // Replace with your Gemini API key or inject via GitHub Actions / env variable
 const GROQ_API_KEY = 'YOUR_GROQ_KEY';
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
+const GROQ_MODEL = 'compound-beta';
 const PEXELS_API_KEY = 'YOUR_PEXELS_KEY';
 
 const CURRENCIES = {
@@ -69,25 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initQuickPills();
   renderTrending();
   initCurrencySelector();
-
-  // Live currency rates fetch karo
-  fetch('https://api.exchangerate-api.com/v4/latest/USD')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data && data.rates) {
-        Object.keys(CURRENCIES).forEach(function(code) {
-          if (data.rates[code]) {
-            CURRENCIES[code].rate = data.rates[code];
-          }
-        });
-        updateCurrencyDisplay();
-      }
-    })
-    .catch(function() {
-      // API fail hogi toh hardcoded rates rahenge
-    });
-});
-
 // LOADER
 function initLoader() {
   const loader = document.getElementById('loader');
@@ -343,19 +324,20 @@ async function handleSearch() {
 }
 
 // GROQ API
-async function callGemini(prompt) {
+async function callGroq(prompt) {
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + GROQ_API_KEY
     },
-    body: JSON.stringify({
-      model: GROQ_MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 3500,
-      temperature: 0.6
-    })
+  body: JSON.stringify({
+  model: GROQ_MODEL,
+  messages: [{ role: 'user', content: prompt }],
+  max_tokens: 3500,
+  temperature: 0.6,
+  tools: [{ type: 'web_search' }]   // ← yeh ek line add karo
+})
   });
 
   if (!res.ok) {
@@ -887,12 +869,13 @@ async function sendFollowup() {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + GROQ_API_KEY
       },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: messages,
-        max_tokens: 800,
-        temperature: 0.7
-      })
+     body: JSON.stringify({
+  model: GROQ_MODEL,
+  messages: messages,
+  max_tokens: 800,
+  temperature: 0.7,
+  tools: [{ type: 'web_search' }]   // ← yeh ek line add karo
+})
     });
 
     const data = await res.json();
@@ -2106,11 +2089,12 @@ async function generateDreamTrip() {
         'Authorization': 'Bearer ' + GROQ_API_KEY
       },
       body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: 1500,
-        temperature: 0.8
-      })
+  model: GROQ_MODEL,
+  messages: [{ role: 'user', content: prompt }],
+  max_tokens: 1500,
+  temperature: 0.8,
+  tools: [{ type: 'web_search' }]
+})
     });
 
     if (!res.ok) {
