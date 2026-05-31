@@ -2852,3 +2852,287 @@ body.cursor-hover .cursor-ring {
   align-items: center;
   gap: 8px;
 }
+   /* ═══ DREAM TRIP GENERATOR ═══ */
+.dream-section {
+  padding: 5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.dream-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 2.5rem;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+/* Input */
+.dream-input-wrap {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.dream-input-icon {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 1.2rem;
+  z-index: 2;
+}
+
+.dream-input {
+  width: 100%;
+  padding: 14px 16px 14px 46px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: none;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+
+.dream-input:focus {
+  outline: none;
+  border-color: rgba(201,168,76,0.5);
+}
+
+.dream-input::placeholder { color: var(--text-muted); }
+
+/* Mood Pills */
+.dream-mood-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.dream-pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.dream-pill {
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.dream-pill:hover {
+  background: rgba(201,168,76,0.12);
+  border-color: rgba(201,168,76,0.4);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+/* Generate Button */
+.dream-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.2s, transform 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.dream-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.dream-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Loading */
+.dream-loading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 1.2rem 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Results Label */
+.dream-results-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 1.5rem 0 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+/* Cards Grid */
+.dream-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* Individual Result Card */
+.dream-result-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeInUp 0.5s ease both;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.dream-result-card:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-3px);
+}
+
+.dream-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dream-card-flag { font-size: 2.2rem; line-height: 1; }
+
+.dream-match-score {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-weight: 700;
+}
+
+.score-num { font-size: 1.6rem; line-height: 1; }
+.score-pct { font-size: 0.75rem; opacity: 0.8; }
+
+.dream-card-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1.2;
+}
+
+.dream-card-reason {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.dream-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.dream-things-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dream-thing {
+  padding: 4px 10px;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #a78bfa;
+}
+
+.dream-hidden-gem {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: rgba(201,168,76,0.06);
+  border-radius: 8px;
+  padding: 8px 10px;
+  line-height: 1.4;
+  border-left: 2px solid rgba(201,168,76,0.3);
+}
+
+.dream-explore-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(124,58,237,0.12);
+  color: #a78bfa;
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  transition: background 0.2s;
+}
+
+.dream-explore-btn:hover { background: rgba(124,58,237,0.25); }
+
+/* Error */
+.dream-error {
+  margin-top: 1rem;
+  padding: 12px 16px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 10px;
+  color: #f87171;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+   /* ═══ PDF EXPORT BUTTON ═══ */
+.pdf-export-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto 1.2rem;
+  padding: 13px 24px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.pdf-export-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+}
+
+.pdf-export-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
