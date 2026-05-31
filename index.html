@@ -118,7 +118,7 @@
     <div class="section-header">
       <span class="section-tag">🌐 Live Globe</span>
       <h2 class="section-title">Explore the World in 3D</h2>
-      <p class="section-sub">Kisi bhi destination pe click karo — poora travel guide milega!</p>
+      <p class="section-sub">Click on any destination — get a complete travel guide instantly!</p>
     </div>
 
     <div class="globe-wrap">
@@ -150,8 +150,8 @@
   <div class="container">
     <div class="section-header">
       <span class="section-tag">📸 Photo Magic</span>
-      <h2 class="section-title">Koi Bhi Photo Upload Karo</h2>
-      <p class="section-sub">AI batayega — yeh jagah kahan hai, aur poora travel guide bhi milega!</p>
+     <h2 class="section-title">Upload Any Photo</h2>
+<p class="section-sub">AI will identify the location — and give you a complete travel guide!</p>
     </div>
 
     <div class="photo-upload-card" id="photoUploadCard">
@@ -164,8 +164,8 @@
         ondrop="photoDrop(event)">
         <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(event)"/>
         <div class="photo-drop-icon">📷</div>
-        <p class="photo-drop-text">Photo yahan drop karo ya click karke select karo</p>
-        <p class="photo-drop-sub">JPG, PNG, WEBP — koi bhi jagah ki photo</p>
+       <p class="photo-drop-text">Drop your photo here or click to select</p>
+       <p class="photo-drop-sub">JPG, PNG, WEBP — any location photo works</p>
       </div>
 
       <!-- Preview -->
@@ -179,13 +179,13 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
-        <span>AI Se Identify Karo</span>
+        <span>Identify with AI</span>
       </button>
 
       <!-- Loading -->
       <div class="photo-loading" id="photoLoading" style="display:none">
         <div class="loading-globe-mini"><div class="lgm-ring"></div><div class="lgm-ring r2"></div></div>
-        <p>AI photo analyze kar raha hai...</p>
+        <p>AI is analyzing your photo...</p>
       </div>
 
       <!-- Result -->
@@ -200,7 +200,7 @@
         </div>
         <div class="photo-confidence" id="photoConfidence"></div>
         <button class="photo-guide-btn" id="photoGuideBtn" onclick="searchFromPhotoResult()">
-          ✈️ Poora Travel Guide Dekho →
+          ✈️ View Full Travel Guide →
         </button>
       </div>
 
@@ -237,7 +237,7 @@
     <div class="section-header">
       <span class="section-tag">Compare</span>
       <h2 class="section-title">Compare Two Destinations</h2>
-      <p class="section-sub">Side-by-side cost, season, visa — best choice highlight hoga</p>
+      <p class="section-sub">Side-by-side cost, season, visa — best choice will be highlighted</p>
     </div>
 
     <div class="compare-inputs">
@@ -278,8 +278,8 @@
   <div class="container">
     <div class="section-header">
       <span class="section-tag">✨ Dream Trip</span>
-      <h2 class="section-title">Apna Mood Batao — AI Trip Dhundega</h2>
-      <p class="section-sub">Koi destination mat socho — bas apna vibe, budget aur travel style likho</p>
+      <h2 class="section-title">Tell Your Mood — AI Finds Your Trip</h2>
+      <p class="section-sub">Don't think of a destination — just describe your vibe, budget and travel style</p>
     </div>
 
     <div class="dream-card">
@@ -297,7 +297,7 @@
 
       <!-- Mood Quick Pills -->
       <div class="dream-mood-pills">
-        <p class="dream-mood-label">Ya inme se chuno:</p>
+        <p class="dream-mood-label">Or choose from these:</p>
         <div class="dream-pills-wrap">
           <button class="dream-pill" onclick="fillDreamInput('Peaceful beach honeymoon, luxury, 7 days, budget $3000')">🏖️ Honeymoon Beach</button>
           <button class="dream-pill" onclick="fillDreamInput('Snow mountains trekking adventure, budget $1200, 10 days')">🏔️ Mountain Adventure</button>
@@ -315,24 +315,24 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
         </svg>
-        <span>Mera Dream Trip Dhundo</span>
+        <span>Find My Dream Trip</span>
       </button>
 
       <!-- Loading -->
       <div class="dream-loading" id="dreamLoading" style="display:none">
         <div class="loading-globe-mini"><div class="lgm-ring"></div><div class="lgm-ring r2"></div></div>
-        <p>AI tumhare liye perfect destinations dhundh raha hai...</p>
+        <p>AI is finding perfect destinations for you...</p>
       </div>
 
       <!-- Results -->
       <div class="dream-results" id="dreamResults" style="display:none">
-        <p class="dream-results-label">🎯 AI ne yeh 3 destinations suggest kiye tumhare liye:</p>
+        <p class="dream-results-label">🎯 AI suggested these 3 perfect destinations for you:</p>
         <div class="dream-cards-grid" id="dreamCardsGrid"></div>
       </div>
 
       <!-- Error -->
       <div class="dream-error" id="dreamError" style="display:none">
-        <span>⚠️</span> <span id="dreamErrorMsg">Kuch error aa gaya.</span>
+        <span>⚠️</span> <span id="dreamErrorMsg">Something went wrong. Please try again.</span>
       </div>
 
     </div>
