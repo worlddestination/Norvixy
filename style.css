@@ -2548,7 +2548,11 @@ body.cursor-hover .cursor-ring {
 }
 .kamlesh-particles {
   position: absolute;
-   /* ═══ VISA CHECKER ═══ */
+  top: -10px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
 .visa-section { margin-bottom: 2.5rem; }
 
 .visa-passport-selector { margin-bottom: 1.2rem; }
