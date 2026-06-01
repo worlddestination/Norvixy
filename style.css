@@ -3585,3 +3585,69 @@ body.cursor-hover .cursor-ring {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+/* ═══ MOBILE HEADER FIX ═══ */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+    height: auto;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 0;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Logo left side */
+  .logo {
+    flex: 1;
+  }
+
+  .logo-text { font-size: 17px; }
+  .logo-icon { font-size: 20px; }
+
+  /* Nav hide */
+  .nav { display: none; }
+
+  /* Currency button chhota */
+  .currency-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Start Journey button chhota */
+  .btn-header {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  /* Wishlist button */
+  .btn-wishlist {
+    padding: 7px 10px;
+    font-size: 12px;
+    margin-left: 0;
+  }
+
+  /* Agar phir bhi overflow ho toh buttons 2nd line pe */
+  .currency-wrap,
+  .btn-header,
+  .btn-wishlist {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Bahut choti screen pe Start Journey text chhota */
+  .btn-header:first-of-type {
+    display: none;
+  }
+
+  .currency-btn {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .logo-text { font-size: 15px; }
+}
